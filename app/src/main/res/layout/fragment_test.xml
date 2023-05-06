@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".TestFragment">
+
+    <Button
+            android:text="Начать"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/nextButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="30dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:onClick="onNextStage" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/nextButton"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            android:id="@+id/constraintLayout">
+
+
+        <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="300dp"
+                android:layout_height="16dp"
+                android:id="@+id/timePB"
+                app:layout_constraintEnd_toStartOf="@+id/timeTV"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+                android:text="11.1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timeTV"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp">
+
+        <TextView
+                android:text="Страна"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ctStart"
+                android:textSize="34sp" />
+
+        <TextView
+                android:text="название страны"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/startNameTV"
+                android:textSize="24sp"
+                android:visibility="gone" />
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="262dp"
+                tools:src="@tools:sample/avatars"
+                android:id="@+id/flagIV"
+                android:visibility="visible" />
+
+        <Space
+                android:layout_width="match_parent"
+                android:layout_height="109dp" />
+
+        <TextView
+                android:text="Столица"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/needPropTV"
+                android:textSize="34sp" />
+
+        <TextView
+                android:text="название столицы"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/needNameTV"
+                android:textSize="24sp"
+                android:visibility="gone" />
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="357dp"
+                tools:src="@tools:sample/avatars"
+                android:id="@+id/mapIV"
+                android:visibility="gone" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".TestFragment">
+        tools:context=".PrepairFragment">
 
 
     <LinearLayout
@@ -31,7 +31,7 @@
                 <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/spinner"
+                        android:id="@+id/testTypeSelector"
                         android:entries="@array/tests"
                         android:layout_margin="5dp"
 
@@ -51,7 +51,7 @@
                         android:layout_margin="5dp"
                         android:inputType="number"
                         android:ems="10"
-                        android:id="@+id/editTextNumberSigned"
+                        android:id="@+id/countriesCountEntry"
                         android:gravity="right"
                         android:maxLength="3" />
             </TableRow>
@@ -64,15 +64,18 @@
                 <EditText
                         android:layout_margin="5dp"
                         android:inputType="number"
-                        android:maxLength="2" />
+                        android:maxLength="2"
+                        android:id="@+id/timeEntry" />
             </TableRow>
         </TableLayout>
+
         <Button
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_margin="5dp"
                 android:textSize="25dp"
-            android:text="Начать тест"/>
+                android:text="Начать тест"
+                android:onClick="startTest" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
