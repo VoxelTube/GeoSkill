@@ -1,16 +1,21 @@
 package com.mimm.geoskill
 
-import android.opengl.Visibility
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
+import java.lang.Exception
+import java.net.URL
+import java.util.concurrent.Executors
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -24,15 +29,18 @@ private const val ARG_PARAM1 = "config"
  */
 class TestFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private lateinit var config: TestConfig
-    lateinit var ctsList: List<Country>
+    public lateinit var config: TestConfig
+    lateinit var ctsList: Array<Country>
 
-    lateinit var mainHeader : TextView
-    lateinit var questionText : TextView
-    lateinit var flagImage : ImageView
-    lateinit var answHeader : TextView
-    lateinit var answText : TextView
-    lateinit var mapImage : ImageView
+    lateinit var progPB: ProgressBar
+    lateinit var progTV: TextView
+    lateinit var mainHeader: TextView
+    lateinit var questionText: TextView
+    lateinit var flagImage: ImageView
+    lateinit var answHeader: TextView
+    lateinit var answText: TextView
+    lateinit var mapImage: ImageView
+    lateinit var timeout: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         config = TestConfig()
@@ -43,39 +51,42 @@ class TestFragment : Fragment() {
         }
     }
 
-    private fun updateByTestType(v : View){
+    private fun updateByTestType(v: View) {
+        progPB = v.findViewById(R.id.progressBar)
+        progTV = v.findViewById(R.id.progressTV)
         mainHeader = v.findViewById(R.id.ctStart)
         questionText = v.findViewById(R.id.startNameTV)
         flagImage = v.findViewById(R.id.flagIV)
         answHeader = v.findViewById(R.id.needPropTV)
         answText = v.findViewById(R.id.needNameTV)
         mapImage = v.findViewById(R.id.mapIV)
+        timeout = v.findViewById(R.id.timeEndTV)
         if (countries == null) {
             var gs = GsonBuilder().create()
-            val listType = object : TypeToken<List<Country?>?>() {}.rawType
-            countries = gs.fromJson(ctsXML, listType) as List<Country>?
+            countries = gs.fromJson<Array<Country>>(ctsXML, Array<Country>::class.java)
         }
         ctsList = countries!!
         when (config.type) {
             TestType.Capital -> {
                 questionText.visibility = View.VISIBLE;
-                answText.visibility = View.VISIBLE;
+                answText.visibility = View.INVISIBLE;
             }
 
             TestType.Flag -> {
                 mainHeader.text = "Флаг"
                 answHeader.text = "Страна"
                 flagImage.visibility = View.VISIBLE;
-                answText.visibility = View.VISIBLE;
+                answText.visibility = View.INVISIBLE;
             }
 
             TestType.Map -> {
                 answHeader.text = "На карте"
                 questionText.visibility = View.VISIBLE;
-                mapImage.visibility = View.VISIBLE;
+                mapImage.visibility = View.INVISIBLE;
             }
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -84,6 +95,65 @@ class TestFragment : Fragment() {
         var v = inflater.inflate(R.layout.fragment_test, container, false)
         updateByTestType(v)
         return v
+    }
+
+    public fun open() {
+        when (config.type) {
+            TestType.Capital -> {
+                answText.visibility = View.VISIBLE;
+            }
+
+            TestType.Flag -> {
+
+                answText.visibility = View.VISIBLE;
+            }
+
+            TestType.Map -> {
+                mapImage.visibility = View.VISIBLE;
+            }
+        }
+    }
+
+    public fun setQuest(country: Country, answered: Int) {
+        progTV.text = answered.toString() +  "/" + config.count
+        progPB.max = config.count
+        progPB.progress = answered
+        when (config.type) {
+            TestType.Capital -> {
+                questionText.text = country.Name
+                answText.visibility = View.INVISIBLE;
+                answText.text = country.Capital
+            }
+
+            TestType.Flag -> {
+                getBitmap(country.FlagLink, flagImage)
+                answText.visibility = View.INVISIBLE;
+                answText.text = country.Name
+            }
+
+            TestType.Map -> {
+                questionText.text = country.Name
+                mapImage.visibility = View.INVISIBLE;
+                getBitmap(country.MapLink, mapImage)
+            }
+        }
+    }
+
+    fun getBitmap(url: String, imageView: ImageView) {
+        val executor = Executors.newSingleThreadExecutor()
+        val handler = Handler(Looper.getMainLooper())
+        executor.execute {
+            try {
+                val url = URL("https://geo.koltyrin.ru/" + url).openStream()
+                var img = BitmapFactory.decodeStream(url)
+                handler.post {
+                    imageView.setImageBitmap(img)
+                }
+            } catch (e: Exception) {
+                Log.e("web", e.message!!)
+            }
+
+        }
     }
 
     companion object {
@@ -107,7 +177,7 @@ class TestFragment : Fragment() {
             }
 
         @JvmStatic
-        public var countries: List<Country>? = null
+        public var countries: Array<Country>? = null
     }
 
     public val ctsXML = """

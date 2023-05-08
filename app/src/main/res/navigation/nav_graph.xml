@@ -10,7 +10,7 @@
             android:label="@string/ct_name"
             tools:layout="@layout/prepair_fragment">
         <action
-                android:id="@+id/action_NameFragment_to_TestFragment"
+                android:id="@+id/action_LaunchFragment_to_TestFragment"
                 app:destination="@id/TestFragment" />
     </fragment>
         <fragment

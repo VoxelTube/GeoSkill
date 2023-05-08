@@ -14,13 +14,15 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.fragment.app.findFragment
 import com.mimm.geoskill.databinding.ActivityMainBinding
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
+    public var core: TestCore? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
@@ -42,22 +44,36 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startTest(view: View) {
-        var type = findViewById<Spinner>(R.id.testTypeSelector).selectedItem as String
-        var n = findViewById<EditText>(R.id.countriesCountEntry).text.toString().toInt()
-        var time = findViewById<EditText>(R.id.timeEntry).text.toString().toInt()
-        var tt : TestType = TestType.values().first { it.testPoint == type }
-
-
+        var tt: TestType = TestType.Capital
+        var n: Int = 1
+        var time: Int = 1
+        try {
+            var type = findViewById<Spinner>(R.id.testTypeSelector).selectedItem as String
+            n = findViewById<EditText>(R.id.countriesCountEntry).text.toString().toInt()
+            time = findViewById<EditText>(R.id.timeEntry).text.toString().toInt()
+            tt = TestType.values().first { it.testPoint == type }
+        } catch (e: Exception) {
+            return
+        }
         var args = Bundle().apply {
             putString("type", tt.toString())
             putInt("time", time)
             putInt("count", n)
         }
-        view.findNavController().navigate(R.id.action_NameFragment_to_TestFragment, args)
+        view.findNavController().navigate(R.id.action_LaunchFragment_to_TestFragment, args)
     }
 
-    fun onNextStage(view: View){
+    fun onNextStage(view: View) {
+        var frag = view.findFragment() as TestFragment
 
+        if (core == null) {
+
+            core = TestCore(frag)
+        } else if (core!!.view != frag) {
+            core = TestCore(frag)
+        }
+        var btn = view as Button
+        btn.text = core!!.next()
     }
 
     override fun onSupportNavigateUp(): Boolean {
