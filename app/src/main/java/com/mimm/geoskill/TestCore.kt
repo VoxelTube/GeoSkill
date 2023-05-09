@@ -30,6 +30,8 @@ class TestCore {
                 var cts = TestFragment.countries!!
                 var c = cts.get(0)
                 answered++
+                if (view.config.count > TestFragment.countries!!.size)
+                    view.config.count = TestFragment.countries!!.size
                 view.setQuest(c, answered)
                 return "Ответ"
             }
