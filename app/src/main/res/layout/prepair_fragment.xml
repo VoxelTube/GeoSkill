@@ -46,11 +46,9 @@
                         android:text="Количество стран" />
 
                 <EditText
-                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:inputType="number"
-                        android:ems="10"
                         android:id="@+id/countriesCountEntry"
                         android:gravity="right"
                         android:maxLength="3" />

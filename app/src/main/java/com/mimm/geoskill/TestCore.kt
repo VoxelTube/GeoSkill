@@ -3,7 +3,7 @@ package com.mimm.geoskill
 class TestCore {
     var stage: TestStages = TestStages.Preparation
     public lateinit var view: TestFragment
-    var answered = 0
+    public var answered = 0
     public fun next(): String {
         when (stage) {
             TestStages.Thinking -> {
@@ -38,6 +38,7 @@ class TestCore {
 
     constructor(fragment: TestFragment) {
         view = fragment
+        view.gameHandler = this
     }
 }
 
