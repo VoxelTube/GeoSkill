@@ -8,6 +8,10 @@
     <string name="previous">Previous</string>
     <string name="ct_name">Запуск</string>
     <string name="quiz">Skilltest</string>
+    <string name="thinkTime">
+        Секунд на
+        размышление
+    </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

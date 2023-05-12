@@ -2,6 +2,7 @@ package com.mimm.geoskill
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -46,6 +47,10 @@ class TestFragment : Fragment() {
     lateinit var answText: TextView
     lateinit var mapImage: ImageView
     lateinit var timeout: TextView
+    lateinit var timer: TextView
+
+    lateinit var updateTimer: CountDownTimer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         config = TestConfig()
@@ -54,6 +59,35 @@ class TestFragment : Fragment() {
             config.time = it.getInt("time")
             config.count = it.getInt("count")
         }
+        updateTimer = object : CountDownTimer((config.time * 1000).toLong(), 50) {
+            override fun onTick(millisUntilFinished: Long) {
+                if (gameHandler.stage == TestStages.Answered) {
+                    updateTimer.cancel()
+                    timer.visibility = View.INVISIBLE
+
+                } else if ((config.time * 1000).toLong() - millisUntilFinished < 20) {
+                    timer.visibility = View.VISIBLE
+                } else {
+                    var time =
+                        (Math.round((millisUntilFinished.toDouble() / 1000.toDouble() * 10))) / 10.toDouble()
+                    timer.text = time.toString() + " сек."
+                }
+            }
+
+            override fun onFinish() {
+                timer.visibility = View.INVISIBLE
+                timeout.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    fun startTime(i: Int) {
+        var handler = Handler()
+        handler.postDelayed({
+            if (i == gameHandler.answered) {
+                timeout.visibility = View.VISIBLE
+            }
+        }, (config.time * 1000).toLong())
     }
 
     private fun updateByTestType(v: View) {
@@ -67,6 +101,7 @@ class TestFragment : Fragment() {
         answText = v.findViewById(R.id.needNameTV)
         mapImage = v.findViewById(R.id.mapIV)
         timeout = v.findViewById(R.id.timeEndTV)
+        timer = v.findViewById(R.id.timerTV)
         if (countries == null) {
             var gs = GsonBuilder().create()
             var ctsStream = resources.openRawResource(R.raw.countries)
@@ -97,8 +132,7 @@ class TestFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         var v = inflater.inflate(R.layout.fragment_test, container, false)
@@ -122,6 +156,9 @@ class TestFragment : Fragment() {
             }
         }
         timeout.visibility = View.INVISIBLE
+        timer.visibility = View.INVISIBLE
+
+        updateTimer.cancel()
     }
 
     public fun setQuest(country: Country, answered: Int) {
@@ -147,7 +184,7 @@ class TestFragment : Fragment() {
                 getBitmap(country.MapLink, mapImage, answered)
             }
         }
-
+        updateTimer.start()
     }
 
     private fun getFileResId(resName: String): Int {
@@ -170,13 +207,6 @@ class TestFragment : Fragment() {
             } catch (ex: Exception) {
                 Log.e("ex", ex.message!! + " " + location)
             }
-
-            var handler = Handler()
-            handler.postDelayed({
-                if (answered == gameHandler.answered) {
-                    timeout.visibility = View.VISIBLE
-                }
-            }, (config.time * 1000).toLong())
         } else {
             val executor = Executors.newSingleThreadExecutor()
             val handler = Handler(Looper.getMainLooper())
@@ -186,12 +216,6 @@ class TestFragment : Fragment() {
                     var img = BitmapFactory.decodeStream(url)
                     handler.post {
                         imageView.setImageBitmap(img)
-                        var handler = Handler()
-                        handler.postDelayed({
-                            if (answered == gameHandler.answered) {
-                                timeout.visibility = View.VISIBLE
-                            }
-                        }, (config.time * 1000).toLong())
                     }
                 } catch (e: Exception) {
                     Log.e("web", e.message!!)
@@ -228,14 +252,13 @@ class TestFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(type: TestType, time: Int, count: Int) =
-            TestFragment().apply {
-                arguments = Bundle().apply {
-                    putString("type", type.toString())
-                    putInt("time", time)
-                    putInt("count", count)
-                }
+        fun newInstance(type: TestType, time: Int, count: Int) = TestFragment().apply {
+            arguments = Bundle().apply {
+                putString("type", type.toString())
+                putInt("time", time)
+                putInt("count", count)
             }
+        }
 
         @JvmStatic
         public var countries: Array<Country>? = null

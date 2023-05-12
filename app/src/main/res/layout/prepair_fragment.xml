@@ -38,7 +38,7 @@
                         android:gravity="right" />
             </TableRow>
 
-            <TableRow android:layout_width="342dp">
+            <TableRow>
 
                 <TextView
                         android:layout_width="match_parent"
@@ -50,19 +50,23 @@
                         android:layout_margin="5dp"
                         android:inputType="number"
                         android:id="@+id/countriesCountEntry"
-                        android:gravity="right"
+                        android:gravity="left"
                         android:maxLength="3" />
             </TableRow>
             <TableRow>
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Секунд на размышление" />
+                        android:text="Секунд на размышление"
+                        android:maxWidth="100dp"
+                        android:gravity="left"
+                        android:singleLine="false"/>
 
                 <EditText
                         android:layout_margin="5dp"
                         android:inputType="number"
                         android:maxLength="2"
+                        android:gravity="left"
                         android:id="@+id/timeEntry" />
             </TableRow>
         </TableLayout>
