@@ -20,7 +20,7 @@ class TestCore {
 
             TestStages.Answered -> {
                 stage = TestStages.Thinking
-                view.setQuest(view.ctsList[++answered], answered)
+                view.setQuest(view.ctsList[answered++], answered)
                 return "Ответ"
             }
 
@@ -28,11 +28,9 @@ class TestCore {
                 stage = TestStages.Thinking
                 TestFragment.countries?.shuffle()
                 var cts = TestFragment.countries!!
-                var c = cts.get(0)
-                answered++
                 if (view.config.count > TestFragment.countries!!.size)
                     view.config.count = TestFragment.countries!!.size
-                view.setQuest(c, answered)
+                view.setQuest(view.ctsList[answered++], answered)
                 return "Ответ"
             }
         }

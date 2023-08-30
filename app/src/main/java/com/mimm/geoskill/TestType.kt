@@ -10,7 +10,7 @@ enum class TestType constructor() {
         override val testPoint = "Флаг"
     },
     Map {
-        override val testPoint = "Территория"
+        override val testPoint = "На карте"
     };
 
     abstract val testPoint: String

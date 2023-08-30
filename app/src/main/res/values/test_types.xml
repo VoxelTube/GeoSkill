@@ -3,6 +3,6 @@
     <string-array name="tests">
         <item>Столица</item>
         <item>Флаг</item>
-        <item>Территория</item>
+        <item>На карте</item>
     </string-array>
 </resources>
